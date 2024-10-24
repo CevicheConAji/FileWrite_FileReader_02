@@ -8,7 +8,6 @@ public class Main {
     public static Scanner sc = new Scanner(System.in);
     public static void main(String[] args) {
         menu();
-
     }
     public static void menu(){
         boolean salir = false;
@@ -24,7 +23,7 @@ public class Main {
                     setDatos(csv());
                     break;
                     case "2":
-                        leerPrintf(leer(csv()));
+                        leerPrintf(guardarLista(csv()));
                         break;
                         case "3":
                             misDatos(csv());
@@ -33,7 +32,6 @@ public class Main {
                                     salir = true;
                                     break;
             }
-
         }
     }
 
@@ -57,7 +55,7 @@ public class Main {
         return file;
     }
 
-    public static ArrayList<String> leer(File file){
+    public static ArrayList<String> guardarLista(File file){
         ArrayList<String> lista = new ArrayList<>();
 
         try(BufferedReader br = new BufferedReader(new FileReader(file))){
@@ -78,7 +76,6 @@ public class Main {
     }
     public static int camposCabecera(ArrayList<String> lista){
         String[] campo = lista.get(0).split(",");
-
         return campo.length;
     }
     public static int camposContenido(ArrayList<String> lista){
