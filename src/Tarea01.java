@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Main {
+public class Tarea01 {
     public static Scanner sc = new Scanner(System.in);
     public static void main(String[] args) {
         menu();
