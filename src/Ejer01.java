@@ -1,23 +1,95 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import model.Persona;
+
+import java.io.*;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Ejer01 {
+        public static Scanner sc = new Scanner(System.in);
         public static Random r = new Random();
 
         public static void main(String[] args) {
-            arrayAleatorio();
-            leerDat();
+            menu();
+        }
+
+        public static void menu(){
+            boolean continuar = true;
+            while(continuar){
+                System.out.println("***MENU***" +
+                        "\n1) Generar Aleatorio en data.dat" +
+                        "\n2) Introducir números en data.dat" +
+                        "\n3) Leer data.dat" +
+                        "\n4) Alta Persona en persona.dat" +
+                        "\n5) Imprimir persona.dat" +
+                        "\n6) Salir.");
+                switch (sc.nextInt()){
+                    case 1:
+                        arrayAleatorio();
+                        break;
+                        case 2:
+                            escribirDataOput();
+                            break;
+                            case 3:
+                                leerDataInput();
+                                break;
+                                case 4:
+                                    pedirDatos();
+                                    break;
+                                    case 5:
+                                        imprimirDatos();
+                                        break;
+                                        default:
+                                            continuar = false;
+                }
+            }
+        }
+        public static void escribirDataOput(){
+
+            try(DataOutputStream dos = new DataOutputStream(new FileOutputStream("data.dat",true))){
+                while(true) {
+                    System.out.println("escribir datos del archivo");
+                    if (!sc.hasNextInt()) {
+                        System.out.println("La entrada no es un número");
+                        sc.next();
+                        continue;
+                    }
+                    int n = sc.nextInt();
+
+                    if(n == -1){
+                        break;
+                    }
+
+                    dos.writeInt(n);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+        public static void leerDataInput(){
+            try(DataInputStream dataInputStream = new DataInputStream(new FileInputStream("data.dat"))){
+                System.out.println("leer datos del archivo");
+                while (true){
+                    try {
+                        int n = dataInputStream.readInt();
+                        System.out.println(n);
+                    }catch (Exception e){
+                        break;
+                    }
+                }
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         public static void crearDat(){
             File file = new File("data.dat");
             if(!file.exists()){
-                try(FileWriter fw = new FileWriter(file)){
-                    fw.write("Hola");
-                }catch (Exception e){
+                try(DataOutputStream dos = new DataOutputStream(new FileOutputStream(file))){
+
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -35,23 +107,53 @@ public class Ejer01 {
 
         }
         public static void ingresarAleatorio(int[] n){
-            try(FileWriter fw = new FileWriter("data.dat",false)){
-                fw.write(n[0]+"\n");
-                fw.write(n[1]+"\n");
-                fw.write(n[2]+"\n");
-                fw.write(n[3]+"\n");
-                fw.write(n[4]+"\n");
+            try(DataOutputStream dataOutputStream = new DataOutputStream(new FileOutputStream("data.dat"))){
+                dataOutputStream.writeInt(n[0]);
+                dataOutputStream.writeInt(n[1]);
+                dataOutputStream.writeInt(n[2]);
+                dataOutputStream.writeInt(n[3]);
+                dataOutputStream.writeInt(n[4]);
+
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        public static void pedirDatos(){
+            System.out.println("Ingrese su DNI");
+            String dni = sc.nextLine();
+            System.out.println("Ingrese su nombre");
+            String nombre = sc.nextLine();
+            System.out.println("Ingrese su edad");
+            int edad = sc.nextInt();
+
+            Persona persona = new Persona(dni, nombre, edad);
+            ingresarPersona(persona);
+        }
+
+        public static void ingresarPersona(Persona persona){
+            try (DataOutputStream dos = new DataOutputStream(new FileOutputStream("persona.dat",true))){
+                dos.writeUTF(persona.getDni());
+                dos.writeUTF(persona.getNombre());
+                dos.writeInt(persona.getEdad());
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        public static void leerDat(){
-            try(BufferedReader br = new BufferedReader(new FileReader("data.dat"))) {
-                String linea;
-                while ((linea = br.readLine()) != null) {
-                    System.out.println(linea);
+        public static void imprimirDatos(){
+            try(DataInputStream dataInputStream = new DataInputStream(new FileInputStream("persona.dat"))) {
+                while (true){
+                    try {
+                        String dni = dataInputStream.readUTF();
+                        String nombre = dataInputStream.readUTF();
+                        int edad = dataInputStream.readInt();
+                        System.out.println("DNI: " + dni+" Nombre: " + nombre+" Edad: " + edad);
+                    }catch (Exception e){
+                        break;
+                    }
                 }
-            } catch (Exception e) {
+            }catch (Exception e){
                 e.printStackTrace();
             }
         }
