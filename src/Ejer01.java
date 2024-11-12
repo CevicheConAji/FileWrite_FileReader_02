@@ -46,8 +46,8 @@ public class Ejer01 {
         public static void escribirDataOput(){
 
             try(DataOutputStream dos = new DataOutputStream(new FileOutputStream("data.dat",true))){
-                boolean salir = true;
-                while(!salir) {
+
+                while(true) {
                     System.out.println("escribir datos del archivo");
                     if (!sc.hasNextInt()) {
                         System.out.println("La entrada no es un número");
@@ -57,7 +57,7 @@ public class Ejer01 {
                     int n = sc.nextInt();
 
                     if(n == -1){
-                        salir = false;
+                        break;
                     }
 
                     dos.writeInt(n);
