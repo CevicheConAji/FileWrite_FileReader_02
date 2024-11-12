@@ -46,7 +46,8 @@ public class Ejer01 {
         public static void escribirDataOput(){
 
             try(DataOutputStream dos = new DataOutputStream(new FileOutputStream("data.dat",true))){
-                while(true) {
+                boolean salir = true;
+                while(!salir) {
                     System.out.println("escribir datos del archivo");
                     if (!sc.hasNextInt()) {
                         System.out.println("La entrada no es un número");
@@ -56,13 +57,13 @@ public class Ejer01 {
                     int n = sc.nextInt();
 
                     if(n == -1){
-                        break;
+                        salir = false;
                     }
 
                     dos.writeInt(n);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                System.out.println("Error al escribir datos del archivo "+e.getMessage());
             }
 
         }
@@ -78,9 +79,9 @@ public class Ejer01 {
                     }
                 }
             } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
+                System.out.println("La entrada no es un archivo "+e.getMessage());
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                System.out.println(e.getMessage());
             }
         }
 
@@ -90,7 +91,7 @@ public class Ejer01 {
                 try(DataOutputStream dos = new DataOutputStream(new FileOutputStream(file))){
 
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    System.out.println(e.getMessage());
                 }
             }
 
@@ -115,12 +116,13 @@ public class Ejer01 {
                 dataOutputStream.writeInt(n[4]);
 
             } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
+                System.out.println(e.getMessage());
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                System.out.println(e.getMessage());
             }
         }
         public static void pedirDatos(){
+
             System.out.println("Ingrese su DNI");
             String dni = sc.nextLine();
             System.out.println("Ingrese su nombre");
@@ -138,23 +140,24 @@ public class Ejer01 {
                 dos.writeUTF(persona.getNombre());
                 dos.writeInt(persona.getEdad());
             } catch (Exception e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             }
         }
         public static void imprimirDatos(){
             try(DataInputStream dataInputStream = new DataInputStream(new FileInputStream("persona.dat"))) {
                 while (true){
-                    try {
-                        String dni = dataInputStream.readUTF();
-                        String nombre = dataInputStream.readUTF();
-                        int edad = dataInputStream.readInt();
-                        System.out.println("DNI: " + dni+" Nombre: " + nombre+" Edad: " + edad);
-                    }catch (Exception e){
-                        break;
-                    }
+                    String dni = dataInputStream.readUTF();
+                    String nombre = dataInputStream.readUTF();
+                    int edad = dataInputStream.readInt();
+                    System.out.println("DNI: " + dni+" Nombre: " + nombre+" Edad: " + edad);
                 }
-            }catch (Exception e){
-                e.printStackTrace();
+            }catch (EOFException e){
+                System.out.println("Lectura del fichero completada");
+            }
+            catch (FileNotFoundException e){
+                System.out.println(e.getMessage());
+            }catch (IOException e) {
+                System.out.println(e.getMessage());
             }
         }
 
