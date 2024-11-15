@@ -34,10 +34,10 @@ public class Ejer02 {
                         imprimirListaDat(list);
                         break;
                         case "3":
-                            productosDatGuardar();
+
                             break;
                             case "4":
-                                productosDatLeer();
+                                productosDatLeer(productosDatGuardar());
                                 break;
                                 case "5":
                                     productosCsvCabecera();
@@ -99,14 +99,14 @@ public class Ejer02 {
         }
 
     }
-    public static void productosDatGuardar(){
+    public static int productosDatGuardar(){
             double[] precios = {1350,400,890,6200,8730};
             int[] unidades = {5,7,12,8,30};
             String[] descripcion = {"paquete de papel","lápices","bolígrados","carteras","mesas"};
 
         try(DataOutputStream dos = new DataOutputStream(new FileOutputStream("productos.dat"))) {
             // Guardar la longitud del arreglo (para saber cuántos productos hay)
-            dos.writeInt(precios.length);
+
 
             for(int i = 0; i < precios.length; i++){
                 dos.writeDouble(precios[i]);
@@ -116,29 +116,30 @@ public class Ejer02 {
             System.out.println("Datos guardados");
 
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Error"+e.getMessage());
         }
+        return precios.length;
     }
-    public static void productosDatLeer(){
+    public static void productosDatLeer(int tamArray){
         try(DataInputStream dis = new DataInputStream(new FileInputStream("productos.dat"))) {
             // Leer la cantidad de productos();
-            int cantidad = dis.readInt();
+            //int cantidad =
 
-            System.out.printf("%-10s %-10s %-10s %n",
+            System.out.printf("%-10s %-20s %-10s %n",
                     "PRECIOS","UNIDADES","DESCRIPCION");
 
-            for(int i = 0; i < cantidad; i++){
+            for(int i = 0; i < tamArray; i++){
                 double precios = dis.readDouble();
                 int unidades = dis.readInt();
                 String descripcion = dis.readUTF();
 
-                System.out.printf("%-10s %-10s %-10s %n",
+                System.out.printf("%-10s %-20s %-10s %n",
                         precios,unidades,descripcion);
 
 
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Error"+e.getMessage());
         }
     }
     public static void productosCsvCabecera(){
